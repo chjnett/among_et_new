@@ -75,48 +75,44 @@ export default function AdminLoginPage() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-[#0a0a0a] p-4">
-            <Card className="w-full max-w-md border-[#1a1a1a] bg-[#111111] text-[#f5f5f5]">
+        <div className="flex min-h-screen items-center justify-center bg-background p-4">
+            <Card className="w-full max-w-md border-border bg-card text-foreground shadow-sm">
                 <CardHeader className="space-y-1">
-                    <CardTitle className="text-2xl font-light text-[#c9a962]">ETERNA Admin</CardTitle>
-                    <CardDescription className="text-[#a3a3a3]">
+                    <CardTitle className="text-2xl font-bold text-foreground">RICH Admin</CardTitle>
+                    <CardDescription className="text-muted-foreground">
                         관리자 계정으로 로그인해주세요.
                     </CardDescription>
                 </CardHeader>
                 <form onSubmit={handleLogin}>
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
-                            <Label htmlFor="email" className="text-[#d4d4d4]">이메일</Label>
+                            <Label htmlFor="email" className="text-foreground">이메일</Label>
                             <Input
                                 id="email"
                                 type="email"
-                                placeholder="admin@eterna.com"
+                                placeholder="admin@rich.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
-                                className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5] placeholder:text-[#525252] focus-visible:ring-[#c9a962]"
+                                className="border-border bg-transparent text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-foreground"
                             />
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="password" className="text-[#d4d4d4]">비밀번호</Label>
+                            <Label htmlFor="password" className="text-foreground">비밀번호</Label>
                             <Input
                                 id="password"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5] placeholder:text-[#525252] focus-visible:ring-[#c9a962]"
+                                className="border-border bg-transparent text-foreground placeholder:text-muted-foreground/50 focus-visible:ring-foreground"
                             />
                         </div>
                     </CardContent>
                     <CardFooter>
                         <Button
-                            type="button"
-                            onClick={(e) => {
-                                console.log("Button clicked directly");
-                                handleLogin(e);
-                            }}
-                            className="w-full bg-[#c9a962] text-[#000000] hover:bg-[#d4b870]"
+                            type="submit"
+                            className="w-full bg-foreground text-background hover:bg-foreground/90 transition-colors"
                             disabled={isLoading}
                         >
                             {isLoading ? (

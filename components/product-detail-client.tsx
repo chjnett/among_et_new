@@ -30,7 +30,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
             try {
                 await navigator.share({
                     title: product.title,
-                    text: `ETERNA - ${product.title}`,
+                    text: `RICH - ${product.title}`,
                     url: product.externalUrl || window.location.href,
                 })
             } catch {
@@ -142,15 +142,6 @@ export default function ProductDetailClient({ product }: { product: Product }) {
 
                     {/* Action Footer */}
                     <div className="pt-6">
-                        <Button
-                            asChild
-                            className="w-full h-16 bg-foreground text-background hover:bg-foreground/90 text-lg font-bold tracking-tight shadow-md hover:scale-[1.01] transition-all border-none relative overflow-hidden group"
-                        >
-                            <a href="https://open.kakao.com/o/shJstlgi" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-3">
-                                <MessageCircle className="h-5 w-5" />
-                                <span>카카오톡 1:1 문의하기</span>
-                            </a>
-                        </Button>
                     </div>
                 </div>
             </div>

@@ -246,33 +246,33 @@ export default function ProductEditPage({ params }: PageProps) {
 
     if (isLoading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-[#0a0a0a]">
-                <Loader2 className="h-8 w-8 animate-spin text-[#c9a962]" />
+            <div className="flex h-screen items-center justify-center bg-background">
+                <Loader2 className="h-8 w-8 animate-spin text-foreground" />
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] pb-20">
+        <div className="min-h-screen bg-background pb-20 text-foreground">
             {/* Header */}
-            <header className="sticky top-0 z-10 border-b border-[#262626] bg-[#0a0a0a]/80 backdrop-blur-md">
+            <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur-md">
                 <div className="mx-auto flex max-w-5xl items-center justify-between p-4 lg:px-8">
                     <div className="flex items-center gap-4">
-                        <Button asChild variant="ghost" size="icon" className="text-[#a3a3a3] hover:text-[#f5f5f5]">
+                        <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:bg-muted hover:text-foreground">
                             <Link href="/admin/dashboard">
                                 <ChevronLeft className="h-5 w-5" />
                             </Link>
                         </Button>
-                        <h1 className="text-lg font-medium text-[#f5f5f5]">
+                        <h1 className="text-lg font-bold text-foreground">
                             {isNew ? "새 상품 등록" : "상품 수정"}
                         </h1>
                     </div>
                     <Button
                         onClick={handleSubmit}
                         disabled={isSaving}
-                        className="bg-[#c9a962] text-[#000000] hover:bg-[#d4b870]"
+                        className="bg-foreground text-background hover:bg-foreground/90 transition-colors shadow-sm px-6"
                     >
-                        {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin text-background" />}
                         <Save className="mr-2 h-4 w-4" />
                         저장
                     </Button>
@@ -285,7 +285,7 @@ export default function ProductEditPage({ params }: PageProps) {
                     {/* Left Column: Images */}
                     <div className="lg:col-span-1">
                         <div className="sticky top-24 space-y-4">
-                            <Label className="text-[#d4d4d4]">상품 이미지</Label>
+                            <Label className="text-sm font-bold text-foreground/80">상품 이미지</Label>
                             <ImageUploader
                                 images={formData.img_urls}
                                 onChange={(imgs) => setFormData(prev => ({ ...prev, img_urls: imgs }))}
@@ -295,52 +295,52 @@ export default function ProductEditPage({ params }: PageProps) {
 
                     {/* Right Column: Details */}
                     <div className="space-y-8 lg:col-span-2">
-                        <div className="space-y-4 rounded-lg border border-[#262626] bg-[#111111] p-6">
-                            <h2 className="text-lg font-medium text-[#f5f5f5]">기본 정보</h2>
+                        <div className="space-y-6 rounded-lg border border-border bg-card p-6 shadow-sm">
+                            <h2 className="text-lg font-bold text-foreground">기본 정보</h2>
 
-                            <div className="grid gap-4">
+                            <div className="grid gap-6">
                                 <div className="space-y-2">
-                                    <Label className="text-[#a3a3a3]">상품명</Label>
+                                    <Label className="text-sm font-bold text-foreground/70">상품명</Label>
                                     <Input
                                         value={formData.name}
                                         onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-                                        className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5]"
+                                        className="border-border bg-background text-foreground h-11 focus-visible:ring-foreground"
                                         placeholder="상품명을 입력하세요"
                                     />
                                 </div>
 
-                                <div className="grid grid-cols-2 gap-4">
+                                <div className="grid grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <Label className="text-[#a3a3a3]">카테고리</Label>
+                                        <Label className="text-sm font-bold text-foreground/70">카테고리</Label>
                                         <Select
                                             value={formData.category}
                                             onValueChange={(val) => setFormData(prev => ({ ...prev, category: val, subCategory: "" }))}
                                         >
-                                            <SelectTrigger className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5]">
+                                            <SelectTrigger className="border-border bg-background text-foreground h-11 focus:ring-foreground">
                                                 <SelectValue placeholder="선택" />
                                             </SelectTrigger>
-                                            <SelectContent className="border-[#262626] bg-[#111111] text-[#f5f5f5]">
+                                            <SelectContent className="border-border bg-card text-foreground">
                                                 {categoriesData.map(cat => (
-                                                    <SelectItem key={cat.id} value={cat.name}>{cat.name}</SelectItem>
+                                                    <SelectItem key={cat.id} value={cat.name} className="focus:bg-muted focus:text-foreground">{cat.name}</SelectItem>
                                                 ))}
                                             </SelectContent>
                                         </Select>
                                     </div>
                                     <div className="space-y-2">
-                                        <Label className="text-[#a3a3a3]">하위 카테고리</Label>
+                                        <Label className="text-sm font-bold text-foreground/70">하위 카테고리</Label>
                                         <Select
                                             value={formData.subCategory}
                                             onValueChange={(val) => setFormData(prev => ({ ...prev, subCategory: val }))}
                                             disabled={!formData.category}
                                         >
-                                            <SelectTrigger className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5]">
+                                            <SelectTrigger className="border-border bg-background text-foreground h-11 focus:ring-foreground">
                                                 <SelectValue placeholder="선택" />
                                             </SelectTrigger>
-                                            <SelectContent className="border-[#262626] bg-[#111111] text-[#f5f5f5]">
+                                            <SelectContent className="border-border bg-card text-foreground">
                                                 {(() => {
                                                     const selectedCat = categoriesData.find(c => c.name === formData.category)
                                                     return selectedCat?.sub_categories.map(sub => (
-                                                        <SelectItem key={sub.id} value={sub.name}>{sub.name}</SelectItem>
+                                                        <SelectItem key={sub.id} value={sub.name} className="focus:bg-muted focus:text-foreground">{sub.name}</SelectItem>
                                                     ))
                                                 })()}
                                             </SelectContent>
@@ -349,21 +349,21 @@ export default function ProductEditPage({ params }: PageProps) {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label className="text-[#a3a3a3]">외부 링크 URL</Label>
+                                    <Label className="text-sm font-bold text-foreground/70">외부 링크 URL</Label>
                                     <Input
                                         value={formData.external_url}
                                         onChange={(e) => setFormData(prev => ({ ...prev, external_url: e.target.value }))}
-                                        className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5]"
+                                        className="border-border bg-background text-foreground h-11 focus-visible:ring-foreground"
                                         placeholder="https://..."
                                     />
                                 </div>
 
                                 <div className="space-y-2">
-                                    <Label className="text-[#a3a3a3]">상품 설명</Label>
+                                    <Label className="text-sm font-bold text-foreground/70">상품 설명</Label>
                                     <Textarea
                                         value={formData.description}
                                         onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                                        className="min-h-[150px] border-[#262626] bg-[#0a0a0a] text-[#f5f5f5]"
+                                        className="min-h-[150px] border-border bg-background text-foreground focus-visible:ring-foreground resize-none"
                                         placeholder="상품에 대한 설명을 입력하세요"
                                     />
                                 </div>
@@ -371,14 +371,14 @@ export default function ProductEditPage({ params }: PageProps) {
                         </div>
 
 
-                        <div className="space-y-4 rounded-lg border border-[#262626] bg-[#111111] p-6">
-                            <h2 className="text-lg font-medium text-[#f5f5f5]">가격 정보</h2>
+                        <div className="space-y-6 rounded-lg border border-border bg-card p-6 shadow-sm">
+                            <h2 className="text-lg font-bold text-foreground">가격 정보</h2>
                             <div className="space-y-2">
-                                <Label className="text-[#a3a3a3]">판매 가격</Label>
+                                <Label className="text-sm font-bold text-foreground/70">판매 가격</Label>
                                 <Input
                                     value={formData.price}
                                     onChange={(e) => setFormData(prev => ({ ...prev, price: e.target.value }))}
-                                    className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5]"
+                                    className="border-border bg-background text-foreground h-11 focus-visible:ring-foreground"
                                     placeholder="예: 12,000,000원 (텍스트로 입력 가능)"
                                 />
                             </div>

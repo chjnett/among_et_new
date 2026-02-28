@@ -55,7 +55,7 @@ function ProductDetailContent({
       try {
         await navigator.share({
           title: product.title,
-          text: `ETERNA - ${product.title}`,
+          text: `RICH - ${product.title}`,
           url: product.externalUrl,
         })
       } catch {

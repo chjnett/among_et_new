@@ -72,7 +72,7 @@ export function ImageUploader({ images, onChange, maxImages = Infinity }: ImageU
         <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
                 {images.map((url, index) => (
-                    <div key={index} className="group relative aspect-[4/5] overflow-hidden rounded-md border border-[#262626] bg-[#111111]">
+                    <div key={index} className="group relative aspect-[4/5] overflow-hidden rounded-md border border-border bg-muted/20 shadow-sm transition-all hover:shadow-md">
                         <Image
                             src={url}
                             alt={`Product image ${index + 1}`}
@@ -82,13 +82,13 @@ export function ImageUploader({ images, onChange, maxImages = Infinity }: ImageU
                         />
                         <button
                             onClick={() => removeImage(index)}
-                            className="absolute top-2 right-2 rounded-full bg-black/50 p-1 text-white opacity-0 transition-opacity hover:bg-black/80 group-hover:opacity-100"
+                            className="absolute top-2 right-2 rounded-full bg-white/80 p-1.5 text-foreground opacity-0 shadow-sm backdrop-blur-sm transition-all hover:bg-red-50 hover:text-red-600 group-hover:opacity-100"
                             type="button"
                         >
                             <X className="h-4 w-4" />
                         </button>
                         {index === 0 && (
-                            <div className="absolute bottom-0 left-0 right-0 bg-black/60 py-1 text-center text-xs text-white">
+                            <div className="absolute bottom-0 left-0 right-0 bg-foreground/80 py-1.5 text-center text-[10px] font-bold uppercase tracking-wider text-background backdrop-blur-sm">
                                 대표 이미지
                             </div>
                         )}
@@ -99,16 +99,16 @@ export function ImageUploader({ images, onChange, maxImages = Infinity }: ImageU
                     <div
                         onClick={() => fileInputRef.current?.click()}
                         className={cn(
-                            "flex aspect-[4/5] cursor-pointer flex-col items-center justify-center gap-2 rounded-md border border-dashed border-[#262626] bg-[#111111] text-[#737373] transition-colors hover:border-[#c9a962] hover:text-[#c9a962]",
+                            "flex aspect-[4/5] cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-border bg-secondary/30 text-muted-foreground transition-all hover:border-foreground/40 hover:bg-secondary/50 hover:text-foreground",
                             isUploading && "pointer-events-none opacity-50"
                         )}
                     >
                         {isUploading ? (
-                            <Loader2 className="h-6 w-6 animate-spin" />
+                            <Loader2 className="h-6 w-6 animate-spin text-foreground" />
                         ) : (
                             <>
                                 <Upload className="h-6 w-6" />
-                                <span className="text-xs">이미지 업로드</span>
+                                <span className="text-xs font-semibold">이미지 업로드</span>
                             </>
                         )}
                     </div>
@@ -122,7 +122,7 @@ export function ImageUploader({ images, onChange, maxImages = Infinity }: ImageU
                 multiple
                 accept="image/*"
             />
-            <p className="text-xs text-[#525252]">
+            <p className="text-[11px] font-medium text-muted-foreground/60 leading-relaxed uppercase tracking-tight">
                 * 첫 번째 이미지가 대표 이미지로 설정됩니다.
                 <br />
                 * 여러 장의 이미지를 동시에 선택할 수 있습니다.

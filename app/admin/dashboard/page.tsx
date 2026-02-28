@@ -102,23 +102,22 @@ export default function AdminDashboardPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] p-6 lg:p-10">
+        <div className="min-h-screen bg-background p-6 lg:p-10">
             <div className="mx-auto max-w-7xl space-y-8">
                 {/* Header */}
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-3xl font-light text-[#f5f5f5]">상품 관리</h1>
-                        <p className="text-[#737373]">등록된 럭셔리 상품을 관리하세요.</p>
+                        <h1 className="text-3xl font-bold tracking-tight text-foreground">상품 관리</h1>
+                        <p className="text-muted-foreground">등록된 럭셔리 상품을 관리하세요.</p>
                     </div>
-                    <div className="flex gap-2">
-                        {/* <SeedButton /> */}
-                        <Button asChild variant="outline" className="border-[#262626] bg-transparent text-[#a3a3a3] hover:bg-[#262626] hover:text-[#f5f5f5]">
+                    <div className="flex flex-wrap gap-2">
+                        <Button asChild variant="outline" className="border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
                             <Link href="/admin/dashboard/notices">
                                 <Bell className="mr-2 h-4 w-4" />
                                 공지사항 관리
                             </Link>
                         </Button>
-                        <Button asChild variant="outline" className="border-[#262626] bg-transparent text-[#a3a3a3] hover:bg-[#262626] hover:text-[#f5f5f5]">
+                        <Button asChild variant="outline" className="border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
                             <Link href="/admin/dashboard/categories">
                                 <FolderOpen className="mr-2 h-4 w-4" />
                                 카테고리 관리
@@ -127,12 +126,12 @@ export default function AdminDashboardPage() {
                         <Button
                             variant="outline"
                             onClick={handleSignOut}
-                            className="border-[#262626] bg-transparent text-[#a3a3a3] hover:bg-[#262626] hover:text-[#f5f5f5]"
+                            className="border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground transition-colors"
                         >
                             <LogOut className="mr-2 h-4 w-4" />
                             로그아웃
                         </Button>
-                        <Button asChild className="bg-[#c9a962] text-[#000000] hover:bg-[#d4b870]">
+                        <Button asChild className="bg-foreground text-background hover:bg-foreground/90 transition-colors shadow-sm">
                             <Link href="/admin/dashboard/products/new">
                                 <Plus className="mr-2 h-4 w-4" />
                                 상품 등록
@@ -149,10 +148,10 @@ export default function AdminDashboardPage() {
                         variant="ghost"
                         onClick={() => setActiveCategory("All")}
                         className={cn(
-                            "rounded-full px-4 text-sm font-medium transition-colors hover:text-[#f5f5f5]",
+                            "rounded-full px-4 text-sm font-medium transition-colors",
                             activeCategory === "All"
-                                ? "bg-[#c9a962] text-[#000000] hover:bg-[#c9a962]/90 hover:text-black"
-                                : "bg-[#111111] text-[#737373] hover:bg-[#262626]"
+                                ? "bg-foreground text-background hover:bg-foreground/90"
+                                : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                         )}
                     >
                         전체
@@ -163,10 +162,10 @@ export default function AdminDashboardPage() {
                             variant="ghost"
                             onClick={() => setActiveCategory(cat.name)}
                             className={cn(
-                                "rounded-full px-4 text-sm font-medium transition-colors hover:text-[#f5f5f5]",
+                                "rounded-full px-4 text-sm font-medium transition-colors",
                                 activeCategory === cat.name
-                                    ? "bg-[#c9a962] text-[#000000] hover:bg-[#c9a962]/90 hover:text-black"
-                                    : "bg-[#111111] text-[#737373] hover:bg-[#262626]"
+                                    ? "bg-foreground text-background hover:bg-foreground/90"
+                                    : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
                             )}
                         >
                             {cat.name}
@@ -177,17 +176,17 @@ export default function AdminDashboardPage() {
                 {/* Content */}
                 {isLoading ? (
                     <div className="flex h-64 items-center justify-center">
-                        <Loader2 className="h-8 w-8 animate-spin text-[#c9a962]" />
+                        <Loader2 className="h-8 w-8 animate-spin text-foreground" />
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
                         {filteredProducts.map((product) => (
                             <div
                                 key={product.id}
-                                className="group relative flex flex-col overflow-hidden rounded-lg border border-[#262626] bg-[#111111] transition-all hover:border-[#c9a962]/50"
+                                className="group relative flex flex-col overflow-hidden rounded-lg border border-border bg-card transition-all hover:border-foreground/20 hover:shadow-md"
                             >
                                 {/* Image */}
-                                <div className="relative aspect-[4/5] bg-[#000000]">
+                                <div className="relative aspect-[4/5] bg-muted/10">
                                     {product.img_urls && product.img_urls[0] ? (
                                         <Image
                                             src={product.img_urls[0]}
@@ -196,44 +195,44 @@ export default function AdminDashboardPage() {
                                             className="object-cover"
                                         />
                                     ) : (
-                                        <div className="flex h-full items-center justify-center text-[#525252]">
+                                        <div className="flex h-full items-center justify-center text-muted-foreground/40">
                                             No Image
                                         </div>
                                     )}
                                     {/* Actions Overlay (Desktop Only) */}
-                                    <div className="absolute inset-0 hidden items-center justify-center gap-2 bg-black/60 opacity-0 transition-opacity group-hover:opacity-100 md:flex">
+                                    <div className="absolute inset-0 hidden items-center justify-center gap-2 bg-background/80 opacity-0 transition-opacity group-hover:opacity-100 md:flex backdrop-blur-[2px]">
                                         <Button
                                             asChild
                                             size="icon"
-                                            variant="secondary"
-                                            className="h-9 w-9 bg-[#f5f5f5] text-[#000000] hover:bg-[#ffffff]"
+                                            variant="outline"
+                                            className="h-10 w-10 border-border bg-background text-foreground hover:bg-muted"
                                         >
                                             <Link href={`/admin/dashboard/products/${product.id}`}>
-                                                <Pencil className="h-4 w-4" />
+                                                <Pencil className="h-5 w-5" />
                                                 <span className="sr-only">수정</span>
                                             </Link>
                                         </Button>
                                         <Button
                                             size="icon"
                                             variant="destructive"
-                                            className="h-9 w-9"
+                                            className="h-10 w-10"
                                             onClick={() => handleDelete(product.id)}
                                         >
-                                            <Trash2 className="h-4 w-4" />
+                                            <Trash2 className="h-5 w-5" />
                                             <span className="sr-only">삭제</span>
                                         </Button>
                                     </div>
                                 </div>
 
                                 {/* Info */}
-                                <div className="flex flex-1 flex-col p-4">
+                                <div className="flex flex-1 flex-col p-5">
                                     <div className="flex items-start justify-between">
-                                        <div>
-                                            <h3 className="line-clamp-1 font-medium text-[#f5f5f5]">{product.name}</h3>
-                                            <p className="mt-1 text-xs text-[#737373]">
-                                                ID: {product.id.slice(0, 8)}...
+                                        <div className="space-y-1">
+                                            <h3 className="line-clamp-1 font-bold text-foreground text-lg">{product.name}</h3>
+                                            <p className="text-[10px] text-muted-foreground/60 uppercase tracking-widest">
+                                                ID: {product.id.slice(0, 8)}
                                             </p>
-                                            <p className="mt-1 text-sm font-medium text-[#c9a962]">
+                                            <p className="text-base font-bold text-foreground pt-1">
                                                 {/* @ts-ignore */}
                                                 {(() => {
                                                     const priceVal = product.specs?.price;
@@ -255,7 +254,7 @@ export default function AdminDashboardPage() {
                                                 asChild
                                                 size="icon"
                                                 variant="ghost"
-                                                className="h-8 w-8 text-[#a3a3a3] hover:text-[#f5f5f5]"
+                                                className="h-9 w-9 text-muted-foreground hover:bg-muted hover:text-foreground"
                                             >
                                                 <Link href={`/admin/dashboard/products/${product.id}`}>
                                                     <Pencil className="h-4 w-4" />
@@ -264,15 +263,17 @@ export default function AdminDashboardPage() {
                                             <Button
                                                 size="icon"
                                                 variant="ghost"
-                                                className="h-8 w-8 text-[#a3a3a3] hover:text-red-500"
+                                                className="h-9 w-9 text-muted-foreground hover:bg-red-50 hover:text-red-600"
                                                 onClick={() => handleDelete(product.id)}
                                             >
                                                 <Trash2 className="h-4 w-4" />
                                             </Button>
                                         </div>
                                     </div>
-                                    <div className="mt-auto pt-4 text-xs text-[#525252]">
-                                        {new Date(product.created_at).toLocaleDateString()}
+                                    <div className="mt-auto pt-6 flex items-center justify-between">
+                                        <span className="text-[10px] font-medium text-muted-foreground/40 uppercase tracking-tighter">
+                                            {new Date(product.created_at).toLocaleDateString()}
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -281,9 +282,9 @@ export default function AdminDashboardPage() {
                 )}
 
                 {!isLoading && products.length === 0 && (
-                    <div className="flex h-64 flex-col items-center justify-center rounded-lg border border-dashed border-[#262626] text-[#737373]">
-                        <p className="mb-4">등록된 상품이 없습니다.</p>
-                        <Button asChild variant="outline" className="border-[#262626]">
+                    <div className="flex h-64 flex-col items-center justify-center rounded-lg border-2 border-dashed border-border text-muted-foreground bg-muted/5">
+                        <p className="mb-4 font-medium text-lg">등록된 상품이 없습니다.</p>
+                        <Button asChild variant="outline" className="border-border hover:bg-muted">
                             <Link href="/admin/dashboard/products/new">첫 상품 등록하기</Link>
                         </Button>
                     </div>

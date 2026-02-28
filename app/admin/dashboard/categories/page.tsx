@@ -278,31 +278,31 @@ export default function CategoryManagementPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] pb-20">
+        <div className="min-h-screen bg-background pb-20">
             {/* Header */}
-            <header className="sticky top-0 z-10 border-b border-[#262626] bg-[#0a0a0a]/80 backdrop-blur-md">
+            <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur-md">
                 <div className="mx-auto flex max-w-5xl items-center justify-between p-4 lg:px-8">
                     <div className="flex items-center gap-4">
-                        <Button asChild variant="ghost" size="icon" className="text-[#a3a3a3] hover:text-[#f5f5f5]">
+                        <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:bg-muted hover:text-foreground">
                             <Link href="/admin/dashboard">
                                 <ChevronLeft className="h-5 w-5" />
                             </Link>
                         </Button>
-                        <h1 className="text-lg font-medium text-[#f5f5f5]">카테고리 관리</h1>
+                        <h1 className="text-lg font-bold text-foreground">카테고리 관리</h1>
                     </div>
                 </div>
             </header>
 
             <main className="mx-auto max-w-5xl p-4 lg:p-8">
                 {/* Add New Category */}
-                <div className="mb-8 rounded-lg border border-[#262626] bg-[#111111] p-6">
-                    <h2 className="mb-4 text-base font-medium text-[#f5f5f5]">새 상위 카테고리 추가</h2>
+                <div className="mb-8 rounded-lg border border-border bg-card p-6 shadow-sm">
+                    <h2 className="mb-4 text-base font-bold text-foreground">새 상위 카테고리 추가</h2>
                     <div className="flex gap-2">
                         <Input
                             value={newCategoryName}
                             onChange={(e) => setNewCategoryName(e.target.value)}
                             placeholder="카테고리 이름 (예: 신발)"
-                            className="bg-[#0a0a0a] text-[#f5f5f5] border-[#262626] h-10"
+                            className="bg-transparent text-foreground border-border h-11 focus-visible:ring-foreground"
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' && !e.nativeEvent.isComposing) handleAddCategory()
                             }}
@@ -310,9 +310,9 @@ export default function CategoryManagementPage() {
                         <Button
                             onClick={handleAddCategory}
                             disabled={isSubmitting || !newCategoryName.trim()}
-                            className="bg-[#c9a962] text-black hover:bg-[#c9a962]/90 h-10 px-4"
+                            className="bg-foreground text-background hover:bg-foreground/90 h-11 px-6 shadow-sm transition-colors"
                         >
-                            <Plus className="mr-2 h-4 w-4" />
+                            <Plus className="mr-2 h-5 w-5" />
                             추가
                         </Button>
                     </div>
@@ -321,22 +321,22 @@ export default function CategoryManagementPage() {
                 {/* Category List */}
                 {isLoading ? (
                     <div className="flex h-40 items-center justify-center">
-                        <Loader2 className="h-8 w-8 animate-spin text-[#c9a962]" />
+                        <Loader2 className="h-8 w-8 animate-spin text-foreground" />
                     </div>
                 ) : (
                     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         {categories.map((category, index) => (
-                            <div key={category.id} className="rounded-lg border border-[#262626] bg-[#111111] overflow-hidden flex flex-col">
+                            <div key={category.id} className="rounded-lg border border-border bg-card overflow-hidden flex flex-col shadow-sm transition-all hover:shadow-md">
                                 {/* Category Header */}
-                                <div className="flex items-center justify-between border-b border-[#262626] bg-[#1a1a1a] p-3">
-                                    <div className="flex items-center gap-2 text-[#f5f5f5] font-medium flex-1">
-                                        <Folder className="h-4 w-4 text-[#c9a962]" />
+                                <div className="flex items-center justify-between border-b border-border bg-muted/20 p-3">
+                                    <div className="flex items-center gap-2 text-foreground font-bold flex-1">
+                                        <Folder className="h-4 w-4 text-primary" />
                                         {editingCategoryId === category.id ? (
                                             <div className="flex items-center gap-1 flex-1">
                                                 <Input
                                                     value={editingCategoryName}
                                                     onChange={(e) => setEditingCategoryName(e.target.value)}
-                                                    className="h-9 text-sm bg-[#0a0a0a] text-[#f5f5f5] border-[#262626]"
+                                                    className="h-9 text-sm bg-background text-foreground border-border"
                                                     onKeyDown={(e) => {
                                                         if (e.nativeEvent.isComposing) return
                                                         if (e.key === 'Enter') handleSaveCategory(category.id)
@@ -347,7 +347,7 @@ export default function CategoryManagementPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-9 w-9 text-green-500 hover:text-green-400 hover:bg-[#262626]"
+                                                    className="h-9 w-9 text-green-600 hover:text-green-700 hover:bg-green-50"
                                                     onClick={() => handleSaveCategory(category.id)}
                                                 >
                                                     <Check className="h-5 w-5" />
@@ -355,7 +355,7 @@ export default function CategoryManagementPage() {
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-9 w-9 text-red-500 hover:text-red-400 hover:bg-[#262626]"
+                                                    className="h-9 w-9 text-red-600 hover:text-red-700 hover:bg-red-50"
                                                     onClick={handleCancelEditCategory}
                                                 >
                                                     <X className="h-5 w-5" />
@@ -363,11 +363,11 @@ export default function CategoryManagementPage() {
                                             </div>
                                         ) : (
                                             <>
-                                                <span>{category.name}</span>
+                                                <span className="truncate">{category.name}</span>
                                                 <Button
                                                     variant="ghost"
                                                     size="icon"
-                                                    className="h-9 w-9 text-[#737373] hover:text-[#f5f5f5] hover:bg-[#262626]"
+                                                    className="h-9 w-9 text-muted-foreground hover:text-foreground hover:bg-muted"
                                                     onClick={() => handleStartEditCategory(category.id, category.name)}
                                                 >
                                                     <Edit className="h-4 w-4" />
@@ -379,7 +379,7 @@ export default function CategoryManagementPage() {
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-[#737373] hover:text-[#f5f5f5] hover:bg-[#262626]"
+                                            className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted"
                                             onClick={() => handleMoveCategory(category.id, 'up')}
                                             disabled={index === 0}
                                         >
@@ -388,7 +388,7 @@ export default function CategoryManagementPage() {
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-[#737373] hover:text-[#f5f5f5] hover:bg-[#262626]"
+                                            className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-muted"
                                             onClick={() => handleMoveCategory(category.id, 'down')}
                                             disabled={index === categories.length - 1}
                                         >
@@ -397,7 +397,7 @@ export default function CategoryManagementPage() {
                                         <Button
                                             variant="ghost"
                                             size="icon"
-                                            className="h-8 w-8 text-[#737373] hover:text-red-500 hover:bg-transparent"
+                                            className="h-8 w-8 text-muted-foreground hover:text-red-600 hover:bg-red-50"
                                             onClick={() => handleDeleteCategory(category.id)}
                                         >
                                             <Trash2 className="h-4 w-4" />
@@ -406,16 +406,16 @@ export default function CategoryManagementPage() {
                                 </div>
 
                                 {/* Sub Categories */}
-                                <div className="p-3 flex-1 flex flex-col gap-2">
-                                    <ul className="space-y-1">
+                                <div className="p-4 flex-1 flex flex-col gap-4">
+                                    <ul className="space-y-1.5">
                                         {category.sub_categories.map((sub) => (
-                                            <li key={sub.id} className="group flex items-center justify-between rounded px-2 py-1.5 hover:bg-[#262626]">
+                                            <li key={sub.id} className="group flex items-center justify-between rounded px-3 py-2 transition-colors hover:bg-muted/50">
                                                 {editingSubCategoryId === sub.id ? (
                                                     <div className="flex items-center gap-1 flex-1">
                                                         <Input
                                                             value={editingSubCategoryName}
                                                             onChange={(e) => setEditingSubCategoryName(e.target.value)}
-                                                            className="h-8 text-xs bg-[#0a0a0a] text-[#f5f5f5] border-[#262626]"
+                                                            className="h-8 text-xs bg-background text-foreground border-border"
                                                             onKeyDown={(e) => {
                                                                 if (e.nativeEvent.isComposing) return
                                                                 if (e.key === 'Enter') handleSaveSubCategory(sub.id)
@@ -426,7 +426,7 @@ export default function CategoryManagementPage() {
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            className="h-8 w-8 text-green-500 hover:text-green-400 hover:bg-[#262626]"
+                                                            className="h-8 w-8 text-green-600 hover:text-green-700 hover:bg-green-50"
                                                             onClick={() => handleSaveSubCategory(sub.id)}
                                                         >
                                                             <Check className="h-4 w-4" />
@@ -434,7 +434,7 @@ export default function CategoryManagementPage() {
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            className="h-8 w-8 text-red-500 hover:text-red-400 hover:bg-[#262626]"
+                                                            className="h-8 w-8 text-red-600 hover:text-red-700 hover:bg-red-50"
                                                             onClick={handleCancelEditSubCategory}
                                                         >
                                                             <X className="h-4 w-4" />
@@ -442,19 +442,19 @@ export default function CategoryManagementPage() {
                                                     </div>
                                                 ) : (
                                                     <>
-                                                        <span className="text-sm text-[#a3a3a3] flex-1">{sub.name}</span>
+                                                        <span className="text-sm font-medium text-foreground/70 flex-1 truncate">{sub.name}</span>
                                                         <div className="flex items-center gap-1">
                                                             <button
                                                                 onClick={() => handleStartEditSubCategory(sub.id, sub.name)}
-                                                                className="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 text-[#525252] hover:text-[#f5f5f5] transition-opacity"
+                                                                className="p-1.5 opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-foreground transition-all"
                                                             >
-                                                                <Edit className="h-4 w-4" />
+                                                                <Edit className="h-3.5 w-3.5" />
                                                             </button>
                                                             <button
                                                                 onClick={() => handleDeleteSubCategory(sub.id)}
-                                                                className="p-2 opacity-100 md:opacity-0 md:group-hover:opacity-100 text-[#525252] hover:text-red-500 transition-opacity"
+                                                                className="p-1.5 opacity-100 md:opacity-0 md:group-hover:opacity-100 text-muted-foreground hover:text-red-600 transition-all"
                                                             >
-                                                                <Trash2 className="h-4 w-4" />
+                                                                <Trash2 className="h-3.5 w-3.5" />
                                                             </button>
                                                         </div>
                                                     </>
@@ -462,28 +462,28 @@ export default function CategoryManagementPage() {
                                             </li>
                                         ))}
                                         {category.sub_categories.length === 0 && (
-                                            <li className="py-2 text-center text-xs text-[#525252]">하위 카테고리 없음</li>
+                                            <li className="py-4 text-center text-xs text-muted-foreground/40 italic">하위 카테고리 없음</li>
                                         )}
                                     </ul>
 
                                     {/* Add Sub Category Input */}
-                                    <div className="mt-auto pt-3 flex gap-2">
+                                    <div className="mt-auto pt-4 flex gap-2">
                                         <Input
                                             value={newSubCategoryInput[category.id] || ""}
                                             onChange={(e) => setNewSubCategoryInput(prev => ({ ...prev, [category.id]: e.target.value }))}
                                             placeholder="하위 추가..."
-                                            className="h-9 text-xs bg-[#0a0a0a] text-[#f5f5f5] border-[#262626]"
+                                            className="h-10 text-xs bg-muted/30 text-foreground border-border focus-visible:ring-foreground"
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' && !e.nativeEvent.isComposing) handleAddSubCategory(category.id)
                                             }}
                                         />
                                         <Button
                                             size="icon"
-                                            className="h-9 w-9 shrink-0 bg-[#262626] hover:bg-[#333333]"
+                                            className="h-10 w-10 shrink-0 bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
                                             onClick={() => handleAddSubCategory(category.id)}
                                             disabled={!newSubCategoryInput[category.id]?.trim()}
                                         >
-                                            <Plus className="h-4 w-4 text-[#a3a3a3]" />
+                                            <Plus className="h-4 w-4" />
                                         </Button>
                                     </div>
                                 </div>

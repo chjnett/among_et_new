@@ -57,7 +57,14 @@ export interface Database {
                     img_urls: string[]
                     external_url: string
                     description: string
-                    specs: Json
+                    specs: {
+                        price?: string | number
+                        modelNo?: string
+                        material?: string
+                        size?: string
+                        color?: string
+                        [key: string]: any
+                    }
                     created_at: string
                 }
                 Insert: {
@@ -67,7 +74,14 @@ export interface Database {
                     img_urls: string[]
                     external_url: string
                     description: string
-                    specs: Json
+                    specs: {
+                        price?: string | number
+                        modelNo?: string
+                        material?: string
+                        size?: string
+                        color?: string
+                        [key: string]: any
+                    }
                     created_at?: string
                 }
                 Update: {
@@ -77,7 +91,43 @@ export interface Database {
                     img_urls?: string[]
                     external_url?: string
                     description?: string
-                    specs?: Json
+                    specs?: {
+                        price?: string | number
+                        modelNo?: string
+                        material?: string
+                        size?: string
+                        color?: string
+                        [key: string]: any
+                    }
+                    created_at?: string
+                }
+            }
+            notices: {
+                Row: {
+                    id: string
+                    title: string
+                    content: string
+                    is_active: boolean
+                    start_date: string | null
+                    end_date: string | null
+                    created_at: string
+                }
+                Insert: {
+                    id?: string
+                    title: string
+                    content: string
+                    is_active?: boolean
+                    start_date?: string | null
+                    end_date?: string | null
+                    created_at?: string
+                }
+                Update: {
+                    id?: string
+                    title?: string
+                    content?: string
+                    is_active?: boolean
+                    start_date?: string | null
+                    end_date?: string | null
                     created_at?: string
                 }
             }

@@ -118,34 +118,34 @@ export default function NoticeEditPage({ params }: PageProps) {
 
     if (isLoading) {
         return (
-            <div className="flex h-screen items-center justify-center bg-[#0a0a0a]">
-                <Loader2 className="h-8 w-8 animate-spin text-[#c9a962]" />
+            <div className="flex h-screen items-center justify-center bg-background">
+                <Loader2 className="h-8 w-8 animate-spin text-foreground" />
             </div>
         )
     }
 
     return (
-        <div className="min-h-screen bg-[#0a0a0a] pb-20">
+        <div className="min-h-screen bg-background pb-20">
             {/* Header */}
-            <header className="sticky top-0 z-10 border-b border-[#262626] bg-[#0a0a0a]/80 backdrop-blur-md">
+            <header className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur-md">
                 <div className="mx-auto flex max-w-5xl items-center justify-between p-4 lg:px-8">
                     <div className="flex items-center gap-4">
-                        <Button asChild variant="ghost" size="icon" className="text-[#a3a3a3] hover:text-[#f5f5f5]">
+                        <Button asChild variant="ghost" size="icon" className="text-muted-foreground hover:bg-muted hover:text-foreground">
                             <Link href="/admin/dashboard/notices">
                                 <ChevronLeft className="h-5 w-5" />
                             </Link>
                         </Button>
-                        <h1 className="text-lg font-medium text-[#f5f5f5]">
+                        <h1 className="text-lg font-bold text-foreground">
                             {isNew ? "새 공지사항 등록" : "공지사항 수정"}
                         </h1>
                     </div>
                     <Button
                         onClick={handleSubmit}
                         disabled={isSaving}
-                        className="bg-[#c9a962] text-[#000000] hover:bg-[#d4b870]"
+                        className="bg-foreground text-background hover:bg-foreground/90 transition-colors shadow-sm"
                     >
                         {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                        <Save className="mr-2 h-4 w-4" />
+                        {!isSaving && <Save className="mr-2 h-4 w-4" />}
                         저장
                     </Button>
                 </div>
@@ -154,55 +154,55 @@ export default function NoticeEditPage({ params }: PageProps) {
             {/* Form Content */}
             <main className="mx-auto max-w-5xl p-4 lg:p-8">
                 <div className="space-y-8">
-                    <div className="space-y-4 rounded-lg border border-[#262626] bg-[#111111] p-6">
-                        <h2 className="text-lg font-medium text-[#f5f5f5]">기본 정보</h2>
+                    <div className="space-y-6 rounded-lg border border-border bg-card p-6 shadow-sm">
+                        <h2 className="text-lg font-bold text-foreground">기본 정보</h2>
 
                         <div className="space-y-4">
                             <div className="space-y-2">
-                                <Label className="text-[#a3a3a3]">제목</Label>
+                                <Label className="text-sm font-semibold text-foreground/70">제목</Label>
                                 <Input
                                     value={formData.title}
                                     onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                                    className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5]"
+                                    className="border-border bg-background text-foreground h-11 focus-visible:ring-foreground"
                                     placeholder="공지사항 제목을 입력하세요"
                                 />
                             </div>
 
                             <div className="space-y-2">
-                                <Label className="text-[#a3a3a3]">내용</Label>
+                                <Label className="text-sm font-semibold text-foreground/70">내용</Label>
                                 <Textarea
                                     value={formData.content}
                                     onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                                    className="min-h-[200px] border-[#262626] bg-[#0a0a0a] text-[#f5f5f5]"
+                                    className="min-h-[250px] border-border bg-background text-foreground focus-visible:ring-foreground resize-none"
                                     placeholder="공지사항 내용을 입력하세요"
                                 />
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 <div className="space-y-2">
-                                    <Label className="text-[#a3a3a3]">시작일 (선택)</Label>
+                                    <Label className="text-sm font-semibold text-foreground/70">시작일 (선택)</Label>
                                     <Input
                                         type="date"
                                         value={formData.start_date}
                                         onChange={(e) => setFormData(prev => ({ ...prev, start_date: e.target.value }))}
-                                        className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5] w-full"
+                                        className="border-border bg-background text-foreground h-11 focus-visible:ring-foreground"
                                     />
                                 </div>
                                 <div className="space-y-2">
-                                    <Label className="text-[#a3a3a3]">종료일 (선택)</Label>
+                                    <Label className="text-sm font-semibold text-foreground/70">종료일 (선택)</Label>
                                     <Input
                                         type="date"
                                         value={formData.end_date}
                                         onChange={(e) => setFormData(prev => ({ ...prev, end_date: e.target.value }))}
-                                        className="border-[#262626] bg-[#0a0a0a] text-[#f5f5f5] w-full"
+                                        className="border-border bg-background text-foreground h-11 focus-visible:ring-foreground"
                                     />
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between rounded-lg border border-[#262626] p-4">
+                            <div className="flex items-center justify-between rounded-lg border border-border bg-muted/20 p-4">
                                 <div>
-                                    <Label className="text-[#f5f5f5]">활성화</Label>
-                                    <p className="text-xs text-[#737373]">
+                                    <Label className="text-sm font-bold text-foreground">활성화</Label>
+                                    <p className="text-xs text-muted-foreground">
                                         활성화하면 사용자에게 팝업으로 표시됩니다
                                     </p>
                                 </div>

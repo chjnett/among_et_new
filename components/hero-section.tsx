@@ -27,24 +27,22 @@ export function HeroSection() {
   // Animation Checkpoints
   // Storytelling sequence optimized for medium-short scroll (70vh)
 
-  // Logo: 0 -> 100 
-  const logoOpacity = Math.max(0, 1 - scrollY / 100)
+  // Logo: 0 -> 150
+  const logoOpacity = Math.max(0, 1 - scrollY / 150)
   const logoScale = 1 + scrollY / 1200
   const logoBlur = Math.min(6, scrollY / 15)
 
   // Headline: "True Luxury is Timeless"
-  // Starts appearing at 80, fully visible at 180
-  const headlineProgress = Math.min(1, Math.max(0, (scrollY - 80) / 100))
-  const headlineOpacity = headlineProgress
-  const headlineTranslateY = -30 * (1 - headlineProgress)
-  const headlineBlur = 6 * (1 - headlineProgress)
+  // Fades in after logo starts fading out (100 -> 250)
+  const headlineOpacity = Math.min(1, Math.max(0, (scrollY - 100) / 150))
+  const headlineTranslateY = (scrollY - 100) * 0.2 // Parallax starts when it appears
+  const headlineBlur = 0
 
   // Subtext: "시간이 흘러도..."
-  // Starts appearing at 160, fully visible at 260
-  const subtextProgress = Math.min(1, Math.max(0, (scrollY - 160) / 100))
-  const subtextOpacity = subtextProgress
-  const subtextTranslateY = -20 * (1 - subtextProgress)
-  const subtextBlur = 6 * (1 - subtextProgress)
+  // Fades in after headline starts appearing (200 -> 350)
+  const subtextOpacity = Math.min(1, Math.max(0, (scrollY - 200) / 150))
+  const subtextTranslateY = (scrollY - 200) * 0.1 // Parallax starts when it appears
+  const subtextBlur = 0
 
   // Scroll Prompt
   const scrollPromptOpacity = Math.max(0, 1 - scrollY / 50)
@@ -57,7 +55,7 @@ export function HeroSection() {
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div
             className={`absolute top-1/2 left-1/2 h-[400px] w-[600px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-muted/40 blur-[120px] transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-            style={{ opacity: isLoaded ? 0.2 + (logoOpacity * 0.4) : 0 }}
+            style={{ opacity: isLoaded ? 0.2 : 0 }}
           />
         </div>
 
@@ -72,12 +70,12 @@ export function HeroSection() {
           }}
         >
           <h1 className={`text-4xl font-bold tracking-[0.4em] text-foreground md:text-5xl lg:text-7xl transition-opacity duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
-            ETERNA
+            RICH
           </h1>
           <div className={`mt-4 flex items-center justify-center gap-3 transition-opacity duration-1000 delay-300 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}>
             <span className="h-px w-8 bg-border" />
             <p className="text-[10px] tracking-[0.3em] text-muted-foreground uppercase md:text-xs">
-              에테르나.com
+              리치.com
             </p>
             <span className="h-px w-8 bg-border" />
           </div>
@@ -90,7 +88,7 @@ export function HeroSection() {
             opacity: headlineOpacity,
             transform: `translateY(${headlineTranslateY}px)`,
             filter: `blur(${headlineBlur}px)`,
-            display: headlineOpacity <= 0.01 && logoOpacity > 0 ? 'none' : 'block'
+            display: headlineOpacity <= 0 ? 'none' : 'block'
           }}
         >
           <p className="text-xl font-medium leading-relaxed text-foreground md:text-2xl lg:text-4xl tracking-tight">
@@ -108,8 +106,7 @@ export function HeroSection() {
           }}
         >
           <p className="text-sm font-medium leading-7 text-muted-foreground md:text-base">
-            시간이 흘러도 변치 않는 가치,<br />
-            당신만을 위한 큐레이션을 만나보세요.
+            시간이 흘러도 변치 않는 가치
           </p>
         </div>
 
