@@ -36,8 +36,8 @@ export default async function HomePage({
     })) || [])
   ]
 
-  // 2. Fetch Products with DB-level filtering
-  let productsQuery = supabase
+  // 2. Fetch Products (filtering is applied after mapping to avoid join-filter mismatch)
+  const { data: productsData } = await supabase
     .from('products')
     .select(`
         *,
@@ -48,40 +48,10 @@ export default async function HomePage({
             )
         )
     `)
-
-  // Apply filters at DB level if they are not "전체" (All)
-  if (categoryParam !== "전체") {
-    // We need to filter by the joined category name
-    // In Supabase, we can use dot notation for joined tables
-    productsQuery = productsQuery.filter('sub_categories.categories.name', 'eq', categoryParam)
-  }
-
-  if (subCategoryParam) {
-    productsQuery = productsQuery.filter('sub_categories.name', 'eq', subCategoryParam)
-  }
-
-  const { data: productsData } = await productsQuery.order('created_at', { ascending: false })
-
-  let finalProductsData = productsData || []
-  if (finalProductsData.length === 0) {
-    const { data: fallbackProductsData } = await supabase
-      .from('products')
-      .select(`
-        *,
-        sub_categories (
-          name,
-          categories (
-            name
-          )
-        )
-      `)
-      .order('created_at', { ascending: false })
-
-    finalProductsData = fallbackProductsData || []
-  }
+    .order('created_at', { ascending: false })
 
   // 3. Client-side mapping & safety (already filtered by DB)
-  const mappedProducts: Product[] = finalProductsData.map((p: any) => ({
+  const mappedProducts: Product[] = (productsData || []).map((p: any) => ({
     id: p.id,
     title: p.name,
     category: (p.sub_categories?.categories?.name || "가방").trim().normalize("NFC"),
@@ -106,7 +76,11 @@ export default async function HomePage({
     description: p.description || ""
   })) || []
 
-  let formattedProducts = mappedProducts
+  const formattedProducts = mappedProducts.filter((product) => {
+    if (categoryParam !== "전체" && product.category !== categoryParam) return false
+    if (subCategoryParam && product.subCategory !== subCategoryParam) return false
+    return true
+  })
 
   return (
     <main className="min-h-screen bg-background">

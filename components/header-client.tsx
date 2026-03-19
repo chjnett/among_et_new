@@ -69,7 +69,7 @@ export function HeaderClient({ categories }: { categories: Category[] }) {
 
           <aside className="absolute inset-y-0 left-0 w-screen overflow-y-auto bg-white shadow-[18px_0_40px_rgba(0,0,0,0.22)]">
             <div className="relative h-[240px] overflow-hidden border-b border-black/80">
-              <img src="/pre_img.png" alt="Sidebar preview" className="h-full w-full object-cover" />
+              <img src="/side_bar.jpeg" alt="Sidebar preview" className="h-full w-full object-cover" />
               <button
                 onClick={closeMenu}
                 className="absolute right-4 top-4 rounded-full bg-black/50 p-2 text-white"

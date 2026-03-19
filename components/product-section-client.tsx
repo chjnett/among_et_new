@@ -72,7 +72,7 @@ export function ProductSectionClient({
   searchQuery,
 }: ProductSectionClientProps) {
   const [mobileSubSelections, setMobileSubSelections] = useState<Record<string, string>>({})
-  const [mobileExpanded, setMobileExpanded] = useState<Record<string, boolean>>({})
+  const [mobileVisibleCounts, setMobileVisibleCounts] = useState<Record<string, number>>({})
   const [editorialItems, setEditorialItems] = useState<EditorialCard[]>(editorialCards)
   const mobileSectionRef = useRef<HTMLDivElement | null>(null)
 
@@ -146,8 +146,13 @@ export function ProductSectionClient({
   const watchCategory = findCategoryByKeywords(["시계", "watch"])
   const bagCategory = findCategoryByKeywords(["가방", "bag"])
   const prioritizedSections = [watchCategory, bagCategory].filter(Boolean) as string[]
-  const mobileSectionCategories =
+  const defaultMobileSectionCategories =
     prioritizedSections.length > 0 ? prioritizedSections : orderedCategoryNames.slice(0, 2)
+  const normalizedSelectedCategory = normalizeLabel(selectedCategory || "전체")
+  const mobileSectionCategories =
+    normalizedSelectedCategory !== "전체" && orderedCategoryNames.includes(normalizedSelectedCategory)
+      ? [normalizedSelectedCategory]
+      : defaultMobileSectionCategories
 
   useEffect(() => {
     const fetchEditorialBlocks = async () => {
@@ -279,8 +284,9 @@ export function ProductSectionClient({
               selectedSub === "전체"
                 ? categoryItems
                 : categoryItems.filter((item) => normalizeLabel(item.subCategory) === selectedSub)
-            const expanded = mobileExpanded[categoryName] || false
-            const shownItems = expanded ? visibleItems : visibleItems.slice(0, 4)
+            const currentVisibleCount = mobileVisibleCounts[categoryName] ?? 4
+            const shownItems = visibleItems.slice(0, currentVisibleCount)
+            const hasMore = shownItems.length < visibleItems.length
 
             return (
               <section key={categoryName} className="space-y-3 rounded-sm border border-border/60 bg-[#f8f8f6] p-2.5">
@@ -297,7 +303,7 @@ export function ProductSectionClient({
                           key={`${categoryName}-${sub}`}
                           onClick={() => {
                             setMobileSubSelections((prev) => ({ ...prev, [categoryName]: sub }))
-                            setMobileExpanded((prev) => ({ ...prev, [categoryName]: false }))
+                            setMobileVisibleCounts((prev) => ({ ...prev, [categoryName]: 4 }))
                           }}
                           className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] tracking-[0.08em] transition-colors ${
                             active
@@ -348,15 +354,15 @@ export function ProductSectionClient({
                   <div className="flex justify-center pt-1">
                     <button
                       type="button"
-                      onClick={() =>
-                        setMobileExpanded((prev) => ({
+                      onClick={() => {
+                        setMobileVisibleCounts((prev) => ({
                           ...prev,
-                          [categoryName]: !expanded,
+                          [categoryName]: hasMore ? currentVisibleCount + 4 : 4,
                         }))
-                      }
+                      }}
                       className="rounded-full border border-border/70 bg-white px-4 py-2 text-[12px] tracking-[0.08em] text-foreground/70"
                     >
-                      {expanded ? "접기" : "더보기"}
+                      {hasMore ? "더보기" : "접기"}
                     </button>
                   </div>
                 )}

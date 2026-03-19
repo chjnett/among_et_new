@@ -12,6 +12,7 @@ export default function ProductDetailClient({ product }: { product: Product }) {
     const router = useRouter()
     const [currentImageIndex, setCurrentImageIndex] = useState(0)
     const [isWishlisted, setIsWishlisted] = useState(false)
+    const [touchStartX, setTouchStartX] = useState<number | null>(null)
 
     const gallery = product.gallery && product.gallery.length > 0 ? product.gallery : [product.image]
 
@@ -23,6 +24,20 @@ export default function ProductDetailClient({ product }: { product: Product }) {
     const prevImage = () => {
         if (gallery.length <= 1) return
         setCurrentImageIndex((prev) => (prev - 1 + gallery.length) % gallery.length)
+    }
+
+    const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+        setTouchStartX(e.touches[0]?.clientX ?? null)
+    }
+
+    const handleTouchEnd = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (touchStartX === null) return
+        const endX = e.changedTouches[0]?.clientX ?? touchStartX
+        const diff = touchStartX - endX
+        setTouchStartX(null)
+        if (Math.abs(diff) < 40) return
+        if (diff > 0) nextImage()
+        else prevImage()
     }
 
     const handleShare = async () => {
@@ -53,7 +68,11 @@ export default function ProductDetailClient({ product }: { product: Product }) {
 
             {/* 1. Image Section */}
             <div className="relative h-[58svh] min-h-[360px] w-full shrink-0 bg-muted/20 lg:h-screen lg:w-[60%] lg:sticky lg:top-0">
-                <div className="relative h-full w-full">
+                <div
+                    className="relative h-full w-full touch-pan-y"
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                >
                     <Image
                         src={gallery[currentImageIndex] || "/placeholder.svg"}
                         alt={product.title}
@@ -66,13 +85,13 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                         <>
                             <button
                                 onClick={prevImage}
-                                className="absolute top-1/2 left-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border/20 bg-white/30 text-foreground backdrop-blur-md transition-all hover:bg-white/60"
+                                className="absolute top-1/2 left-4 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border/20 bg-white/30 text-foreground backdrop-blur-md transition-all hover:bg-white/60 md:flex"
                             >
                                 <ChevronLeft className="h-6 w-6" />
                             </button>
                             <button
                                 onClick={nextImage}
-                                className="absolute top-1/2 right-4 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border/20 bg-white/30 text-foreground backdrop-blur-md transition-all hover:bg-white/60"
+                                className="absolute top-1/2 right-4 z-10 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-border/20 bg-white/30 text-foreground backdrop-blur-md transition-all hover:bg-white/60 md:flex"
                             >
                                 <ChevronRight className="h-6 w-6" />
                             </button>
