@@ -6,6 +6,7 @@ import type { Category, Product } from "@/lib/data"
 import { VisitorTracker } from "@/components/visitor-tracker"
 import { BrandFlowStrip } from "@/components/brand-flow-strip"
 import { HeaderClient } from "@/components/header-client"
+import { HomeScrollRestore } from "@/components/home-scroll-restore"
 
 // Use ISR (Incremental Static Regeneration) - Revalidate every hour
 // This significantly reduces CPU usage on Vercel
@@ -84,6 +85,7 @@ export default async function HomePage({
 
   return (
     <main className="min-h-screen bg-background">
+      <HomeScrollRestore />
       <VisitorTracker />
       <HeaderClient categories={mappedCategories} />
 

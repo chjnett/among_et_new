@@ -64,6 +64,12 @@ interface EditorialBlock {
   is_active: boolean
 }
 
+const KAKAO_PAYMENT_URL = "https://open.kakao.com/o/sVOBwxli"
+const SCROLL_Y_KEY = "home-scroll-y"
+const SCROLL_PATH_KEY = "home-scroll-path"
+const SCROLL_TARGET_KEY = "home-scroll-target-product-id"
+const MOBILE_UI_STATE_KEY = "home-mobile-ui-state"
+
 export function ProductSectionClient({
   categories,
   products,
@@ -78,6 +84,21 @@ export function ProductSectionClient({
 
   const safeSrc = (src?: string) => (src?.trim() ? src : "/placeholder.svg")
   const normalizeLabel = (value: string) => value.trim().normalize("NFC")
+  const saveScrollPosition = (productId?: string) => {
+    sessionStorage.setItem(SCROLL_Y_KEY, String(window.scrollY))
+    sessionStorage.setItem(SCROLL_PATH_KEY, `${window.location.pathname}${window.location.search}`)
+    if (productId) {
+      sessionStorage.setItem(SCROLL_TARGET_KEY, productId)
+    }
+    sessionStorage.setItem(
+      MOBILE_UI_STATE_KEY,
+      JSON.stringify({
+        path: `${window.location.pathname}${window.location.search}`,
+        mobileSubSelections,
+        mobileVisibleCounts,
+      })
+    )
+  }
   const resolveEditorialHref = (card: EditorialCard) => {
     const rawLink = card.link_url?.trim()
 
@@ -178,6 +199,46 @@ export function ProductSectionClient({
 
     fetchEditorialBlocks()
   }, [])
+
+  useEffect(() => {
+    const currentPath = `${window.location.pathname}${window.location.search}`
+    const rawState = sessionStorage.getItem(MOBILE_UI_STATE_KEY)
+    if (!rawState) return
+
+    try {
+      const parsed = JSON.parse(rawState) as {
+        path?: string
+        mobileSubSelections?: Record<string, string>
+        mobileVisibleCounts?: Record<string, number>
+      }
+      if (parsed.path !== currentPath) return
+      if (parsed.mobileSubSelections) setMobileSubSelections(parsed.mobileSubSelections)
+      if (parsed.mobileVisibleCounts) setMobileVisibleCounts(parsed.mobileVisibleCounts)
+    } catch {
+      // ignore invalid session cache
+    }
+  }, [])
+
+  useEffect(() => {
+    const targetProductId = sessionStorage.getItem(SCROLL_TARGET_KEY)
+    if (!targetProductId) return
+
+    const tryScroll = () => {
+      const target = document.getElementById(`product-card-${targetProductId}`)
+      if (!target) return false
+      target.scrollIntoView({ block: "center", behavior: "auto" })
+      sessionStorage.removeItem(SCROLL_TARGET_KEY)
+      return true
+    }
+
+    if (tryScroll()) return
+    const t1 = window.setTimeout(tryScroll, 250)
+    const t2 = window.setTimeout(tryScroll, 700)
+    return () => {
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
+    }
+  }, [displayProducts.length, mobileVisibleCounts, mobileSubSelections])
 
   useEffect(() => {
     const root = mobileSectionRef.current
@@ -322,7 +383,9 @@ export function ProductSectionClient({
                   {shownItems.map((product) => (
                     <Link
                       key={product.id}
+                      id={`product-card-${product.id}`}
                       href={`/products/${product.id}`}
+                      onClick={() => saveScrollPosition(product.id)}
                       className="group block overflow-hidden rounded-sm border border-border/70 bg-white"
                     >
                       <div className="relative aspect-[4/5] overflow-hidden bg-[#efefec]">
@@ -345,6 +408,17 @@ export function ProductSectionClient({
                         <p className="truncate text-[15px] font-semibold leading-5 text-foreground">
                           {product.price || "\u00A0"}
                         </p>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            window.open(KAKAO_PAYMENT_URL, "_blank", "noopener,noreferrer")
+                          }}
+                          className="mt-1 inline-flex items-center justify-center rounded-sm border border-black bg-black px-2.5 py-1 text-[11px] font-semibold tracking-[0.08em] text-white"
+                        >
+                          주문하기
+                        </button>
                       </div>
                     </Link>
                   ))}

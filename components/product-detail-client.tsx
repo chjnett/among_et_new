@@ -3,10 +3,12 @@
 import { useState } from "react"
 import Image from "next/image"
 import { useRouter } from "next/navigation"
-import { ExternalLink, Share2, Heart, ChevronLeft, ChevronRight, X, MessageCircle } from "lucide-react"
+import { Share2, Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Product } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+
+const KAKAO_PAYMENT_URL = "https://open.kakao.com/o/sVOBwxli"
 
 export default function ProductDetailClient({ product }: { product: Product }) {
     const router = useRouter()
@@ -161,6 +163,14 @@ export default function ProductDetailClient({ product }: { product: Product }) {
 
                     {/* Action Footer */}
                     <div className="pt-6">
+                        <a
+                            href={KAKAO_PAYMENT_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex h-12 w-full items-center justify-center rounded-md bg-black px-4 text-sm font-semibold tracking-[0.08em] text-white"
+                        >
+                            주문하기
+                        </a>
                     </div>
                 </div>
             </div>

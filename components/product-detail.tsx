@@ -25,6 +25,8 @@ interface ProductDetailProps {
   isAdmin?: boolean
 }
 
+const KAKAO_PAYMENT_URL = "https://open.kakao.com/o/sVOBwxli"
+
 function ProductDetailContent({
   product,
   onClose,
@@ -207,8 +209,8 @@ function ProductDetailContent({
             asChild
             className="w-full h-14 bg-foreground text-base font-semibold tracking-tight text-background hover:bg-foreground/90 transition-all rounded-md"
           >
-            <a href={product.externalUrl} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
-              <span>공식 홈페이지에서 구매하기</span>
+            <a href={KAKAO_PAYMENT_URL} target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-2">
+              <span>주문하기</span>
               <ExternalLink className="h-4 w-4" />
             </a>
           </Button>

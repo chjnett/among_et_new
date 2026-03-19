@@ -17,6 +17,8 @@ interface EditorialRelatedProductsProps {
 }
 
 const STEP = 4
+const SCROLL_Y_KEY = "home-scroll-y"
+const SCROLL_PATH_KEY = "home-scroll-path"
 
 export function EditorialRelatedProducts({ products }: EditorialRelatedProductsProps) {
   const [visibleCount, setVisibleCount] = useState(STEP)
@@ -24,6 +26,10 @@ export function EditorialRelatedProducts({ products }: EditorialRelatedProductsP
 
   const visibleProducts = useMemo(() => products.slice(0, visibleCount), [products, visibleCount])
   const hasMore = visibleCount < products.length
+  const saveScrollPosition = () => {
+    sessionStorage.setItem(SCROLL_Y_KEY, String(window.scrollY))
+    sessionStorage.setItem(SCROLL_PATH_KEY, `${window.location.pathname}${window.location.search}`)
+  }
 
   useEffect(() => {
     setVisibleCount(STEP)
@@ -55,6 +61,7 @@ export function EditorialRelatedProducts({ products }: EditorialRelatedProductsP
           <Link
             key={product.id}
             href={`/products/${product.id}`}
+            onClick={saveScrollPosition}
             className="group overflow-hidden rounded-sm border border-border/60 bg-card"
           >
             <div className="aspect-[4/5] overflow-hidden bg-muted/20">
