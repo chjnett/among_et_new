@@ -77,7 +77,9 @@ export function EditorialRelatedProducts({ products }: EditorialRelatedProductsP
                 {product.subCategory ? ` / ${product.subCategory}` : ""}
               </p>
               <p className="line-clamp-2 text-[14px] leading-5 text-foreground">{product.name}</p>
-              <p className="text-[14px] font-semibold text-foreground">{product.price || "\u00A0"}</p>
+              <p className="whitespace-normal break-all text-[13px] font-semibold leading-5 text-foreground">
+                {product.price || "\u00A0"}
+              </p>
             </div>
           </Link>
         ))}

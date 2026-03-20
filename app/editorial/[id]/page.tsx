@@ -12,7 +12,8 @@ const formatPrice = (raw: unknown) => {
   if (!value) return ""
   const asNumber = Number(value.replace(/,/g, ""))
   if (Number.isNaN(asNumber)) return value
-  return `${asNumber.toLocaleString()}원`
+  const normalized = asNumber < 10000 ? asNumber * 1000 : asNumber
+  return `${normalized.toLocaleString()}원`
 }
 
 const fallbackEditorialMap: Record<

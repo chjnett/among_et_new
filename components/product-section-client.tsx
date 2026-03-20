@@ -167,11 +167,14 @@ export function ProductSectionClient({
   const watchCategory = findCategoryByKeywords(["시계", "watch"])
   const bagCategory = findCategoryByKeywords(["가방", "bag"])
   const prioritizedSections = [watchCategory, bagCategory].filter(Boolean) as string[]
-  const defaultMobileSectionCategories =
-    prioritizedSections.length > 0 ? prioritizedSections : orderedCategoryNames.slice(0, 2)
+  const defaultMobileSectionCategories = [
+    ...prioritizedSections,
+    ...orderedCategoryNames.filter((name) => !prioritizedSections.includes(name)),
+  ]
   const normalizedSelectedCategory = normalizeLabel(selectedCategory || "전체")
+  const isSpecificCategorySelected = normalizedSelectedCategory !== "전체"
   const mobileSectionCategories =
-    normalizedSelectedCategory !== "전체" && orderedCategoryNames.includes(normalizedSelectedCategory)
+    isSpecificCategorySelected && orderedCategoryNames.includes(normalizedSelectedCategory)
       ? [normalizedSelectedCategory]
       : defaultMobileSectionCategories
 
@@ -355,29 +358,31 @@ export function ProductSectionClient({
                   <h3 className="text-[28px] font-semibold tracking-tight text-foreground">{categoryName}</h3>
                 </div>
 
-                <div className="-mx-4 overflow-x-auto px-4 pb-1">
-                  <div className="inline-flex items-center gap-2">
-                    {subOptions.map((sub) => {
-                      const active = selectedSub === sub
-                      return (
-                        <button
-                          key={`${categoryName}-${sub}`}
-                          onClick={() => {
-                            setMobileSubSelections((prev) => ({ ...prev, [categoryName]: sub }))
-                            setMobileVisibleCounts((prev) => ({ ...prev, [categoryName]: 4 }))
-                          }}
-                          className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] tracking-[0.08em] transition-colors ${
-                            active
-                              ? "border-foreground bg-foreground text-background"
-                              : "border-border/70 bg-white text-foreground/70"
-                          }`}
-                        >
-                          {sub}
-                        </button>
-                      )
-                    })}
+                {!isSpecificCategorySelected && (
+                  <div className="-mx-4 overflow-x-auto px-4 pb-1">
+                    <div className="inline-flex items-center gap-2">
+                      {subOptions.map((sub) => {
+                        const active = selectedSub === sub
+                        return (
+                          <button
+                            key={`${categoryName}-${sub}`}
+                            onClick={() => {
+                              setMobileSubSelections((prev) => ({ ...prev, [categoryName]: sub }))
+                              setMobileVisibleCounts((prev) => ({ ...prev, [categoryName]: 4 }))
+                            }}
+                            className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] tracking-[0.08em] transition-colors ${
+                              active
+                                ? "border-foreground bg-foreground text-background"
+                                : "border-border/70 bg-white text-foreground/70"
+                            }`}
+                          >
+                            {sub}
+                          </button>
+                        )
+                      })}
+                    </div>
                   </div>
-                </div>
+                )}
 
                 <div className="grid grid-cols-2 gap-x-2 gap-y-3">
                   {shownItems.map((product) => (

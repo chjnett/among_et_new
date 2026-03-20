@@ -1,6 +1,5 @@
 "use client"
 
-import Link from "next/link"
 import { Search, X, ShoppingBag } from "lucide-react"
 import type { Category } from "@/lib/data"
 import { useRouter } from "next/navigation"
@@ -50,9 +49,19 @@ export function HeaderClient({ categories }: { categories: Category[] }) {
           </button>
         </div>
 
-        <Link href="/" className="absolute left-1/2 -translate-x-1/2 text-[28px] leading-none tracking-tight text-[#1a1a1a] md:text-[40px]">
+        <button
+          type="button"
+          onClick={() => {
+            setMobileMenuOpen(false)
+            setSearchOpen(false)
+            setSearchQuery("")
+            router.push("/")
+          }}
+          className="absolute left-1/2 z-20 -translate-x-1/2 text-[28px] leading-none tracking-tight text-[#1a1a1a] md:text-[40px]"
+          aria-label="메인으로 이동"
+        >
           SELECT
-        </Link>
+        </button>
 
         <button className="ml-auto p-1.5 text-foreground" aria-label="장바구니">
           <ShoppingBag className="h-[19px] w-[19px] stroke-[1.6]" />
