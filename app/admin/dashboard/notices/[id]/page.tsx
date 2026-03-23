@@ -11,6 +11,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
 import { supabase } from "@/lib/supabase"
 import { useToast } from "@/components/ui/use-toast"
+import { ImageUploader } from "@/components/admin/image-uploader"
 
 interface PageProps {
     params: Promise<{ id: string }>
@@ -30,6 +31,7 @@ export default function NoticeEditPage({ params }: PageProps) {
         is_active: true,
         start_date: "",
         end_date: "",
+        image_url: "",
     })
 
     useEffect(() => {
@@ -61,6 +63,7 @@ export default function NoticeEditPage({ params }: PageProps) {
             is_active: data.is_active,
             start_date: data.start_date ? data.start_date.split('T')[0] : "",
             end_date: data.end_date ? data.end_date.split('T')[0] : "",
+            image_url: data.image_url || "",
         })
         setIsLoading(false)
     }
@@ -85,6 +88,7 @@ export default function NoticeEditPage({ params }: PageProps) {
             is_active: formData.is_active,
             start_date: formData.start_date || null,
             end_date: formData.end_date || null,
+            image_url: formData.image_url || null,
         }
 
         try {
@@ -176,6 +180,16 @@ export default function NoticeEditPage({ params }: PageProps) {
                                     className="min-h-[250px] border-border bg-background text-foreground focus-visible:ring-foreground resize-none"
                                     placeholder="공지사항 내용을 입력하세요"
                                 />
+                            </div>
+
+                            <div className="space-y-4">
+                                <Label className="text-sm font-semibold text-foreground/70">공지 이미지 (선택)</Label>
+                                <ImageUploader
+                                    images={formData.image_url ? [formData.image_url] : []}
+                                    onChange={(images) => setFormData(prev => ({ ...prev, image_url: images[0] || "" }))}
+                                    maxImages={1}
+                                />
+                                <p className="text-xs text-muted-foreground">이미지를 등록하면 팝업 상단에 표시됩니다.</p>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">

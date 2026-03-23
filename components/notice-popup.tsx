@@ -12,6 +12,7 @@ interface Notice {
     content: string
     is_active: boolean
     end_date: string | null
+    image_url: string | null
 }
 
 export function NoticePopup() {
@@ -133,6 +134,33 @@ export function NoticePopup() {
                 >
                     {notice.title}
                 </h2>
+
+                {/* 이미지 */}
+                {notice.image_url && (
+                    <div
+                        style={{
+                            width: 'calc(100% + 4rem)',
+                            marginLeft: '-2rem',
+                            marginRight: '-2rem',
+                            marginTop: '-1rem',
+                            marginBottom: '1.5rem',
+                            backgroundColor: '#f4f4f5',
+                            overflow: 'hidden'
+                        }}
+                    >
+                        <img
+                            src={notice.image_url}
+                            alt="공지용 이미지"
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                display: 'block',
+                                objectFit: 'contain',
+                                maxHeight: '400px'
+                            }}
+                        />
+                    </div>
+                )}
 
                 {/* 내용 */}
                 <div

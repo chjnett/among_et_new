@@ -110,6 +110,7 @@ export interface Database {
                     is_active: boolean
                     start_date: string | null
                     end_date: string | null
+                    image_url: string | null
                     created_at: string
                 }
                 Insert: {
@@ -119,6 +120,7 @@ export interface Database {
                     is_active?: boolean
                     start_date?: string | null
                     end_date?: string | null
+                    image_url?: string | null
                     created_at?: string
                 }
                 Update: {
@@ -128,6 +130,7 @@ export interface Database {
                     is_active?: boolean
                     start_date?: string | null
                     end_date?: string | null
+                    image_url?: string | null
                     created_at?: string
                 }
             }
