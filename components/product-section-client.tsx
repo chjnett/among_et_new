@@ -6,6 +6,7 @@ import { CategoryNav } from "@/components/category-nav"
 import { ProductGrid } from "@/components/product-grid"
 import type { Category, Product } from "@/lib/data"
 import { supabase } from "@/lib/supabase"
+import { cn } from "@/lib/utils"
 
 interface ProductSectionClientProps {
   categories: Category[]
@@ -348,7 +349,9 @@ export function ProductSectionClient({
               selectedSub === "전체"
                 ? categoryItems
                 : categoryItems.filter((item) => normalizeLabel(item.subCategory) === selectedSub)
-            const currentVisibleCount = mobileVisibleCounts[categoryName] ?? 4
+            const currentVisibleCount = isSpecificCategorySelected
+              ? visibleItems.length
+              : (mobileVisibleCounts[categoryName] ?? 4)
             const shownItems = visibleItems.slice(0, currentVisibleCount)
             const hasMore = shownItems.length < visibleItems.length
 
@@ -370,11 +373,10 @@ export function ProductSectionClient({
                               setMobileSubSelections((prev) => ({ ...prev, [categoryName]: sub }))
                               setMobileVisibleCounts((prev) => ({ ...prev, [categoryName]: 4 }))
                             }}
-                            className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] tracking-[0.08em] transition-colors ${
-                              active
-                                ? "border-foreground bg-foreground text-background"
-                                : "border-border/70 bg-white text-foreground/70"
-                            }`}
+                            className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-[11px] tracking-[0.08em] transition-colors ${active
+                              ? "border-foreground bg-foreground text-background"
+                              : "border-border/70 bg-white text-foreground/70"
+                              }`}
                           >
                             {sub}
                           </button>
@@ -439,7 +441,10 @@ export function ProductSectionClient({
                           [categoryName]: hasMore ? currentVisibleCount + 4 : 4,
                         }))
                       }}
-                      className="rounded-full border border-border/70 bg-white px-4 py-2 text-[12px] tracking-[0.08em] text-foreground/70"
+                      className={cn(
+                        "rounded-full border border-border/70 bg-white px-4 py-2 text-[12px] tracking-[0.08em] text-foreground/70",
+                        isSpecificCategorySelected && "hidden"
+                      )}
                     >
                       {hasMore ? "더보기" : "접기"}
                     </button>

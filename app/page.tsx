@@ -1,4 +1,5 @@
-import { supabase } from "@/lib/supabase" // Direct import works for public reading
+import { supabase } from "@/lib/supabase"
+import { fetchAllProducts } from "@/lib/supabase-utils"
 import { HeroSection } from "@/components/hero-section"
 import { ProductSectionClient } from "@/components/product-section-client"
 import { NoticePopup } from "@/components/notice-popup"
@@ -10,7 +11,8 @@ import { HomeScrollRestore } from "@/components/home-scroll-restore"
 
 // Use ISR (Incremental Static Regeneration) - Revalidate every hour
 // This significantly reduces CPU usage on Vercel
-export const revalidate = 3600
+// Use ISR - Revalidate every hour for production, but faster for updates
+export const revalidate = 60
 
 export default async function HomePage({
   searchParams,
@@ -18,8 +20,8 @@ export default async function HomePage({
   searchParams: Promise<{ category?: string; subCategory?: string; search?: string }>
 }) {
   const params = await searchParams
-  const categoryParam = (params.category || "전체").normalize("NFC")
-  const subCategoryParam = params.subCategory?.normalize("NFC")
+  const categoryParam = (params.category || "전체").trim().normalize("NFC")
+  const subCategoryParam = params.subCategory?.trim().normalize("NFC")
   const searchParam = (params.search || "").trim().normalize("NFC")
 
   // 1. Fetch Categories
@@ -37,26 +39,15 @@ export default async function HomePage({
     })) || [])
   ]
 
-  // 2. Fetch Products (filtering is applied after mapping to avoid join-filter mismatch)
-  const { data: productsData } = await supabase
-    .from('products')
-    .select(`
-        *,
-        sub_categories (
-            name,
-            categories (
-                name
-            )
-        )
-    `)
-    .order('created_at', { ascending: false })
+  // 2. Fetch All Products (Bypassing Supabase 1000 limit)
+  const productsData = await fetchAllProducts()
 
   // 3. Client-side mapping & safety (already filtered by DB)
   const mappedProducts: Product[] = (productsData || []).map((p: any) => ({
     id: p.id,
     title: p.name,
-    category: (p.sub_categories?.categories?.name || "가방").trim().normalize("NFC"),
-    subCategory: (p.sub_categories?.name || "가방").trim().normalize("NFC"),
+    category: (p.sub_categories?.categories?.name || "Bag").trim().normalize("NFC"),
+    subCategory: (p.sub_categories?.name || "etc").trim().normalize("NFC"),
     image: p.img_urls?.[0] || "",
     gallery: p.img_urls || [],
     externalUrl: p.external_url || "",
@@ -78,10 +69,12 @@ export default async function HomePage({
   })) || []
 
   const formattedProducts = mappedProducts.filter((product) => {
-    if (categoryParam !== "전체" && product.category !== categoryParam) return false
-    if (subCategoryParam && product.subCategory !== subCategoryParam) return false
+    if (categoryParam !== "전체" && product.category.toLowerCase() !== categoryParam.toLowerCase()) return false
+    if (subCategoryParam && product.subCategory.toLowerCase() !== subCategoryParam.toLowerCase()) return false
     return true
   })
+
+  console.log(`[DEBUG] HomePage - Found ${mappedProducts.length} total products. After filter (${categoryParam}/${subCategoryParam}): ${formattedProducts.length}`)
 
   return (
     <main className="min-h-screen bg-background">

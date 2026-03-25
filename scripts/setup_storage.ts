@@ -3,6 +3,12 @@ import { createClient } from '@supabase/supabase-js'
 import * as dotenv from 'dotenv'
 import * as path from 'path'
 
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
+
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
 dotenv.config({ path: path.resolve(__dirname, '../.env.local') })
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -14,7 +20,7 @@ const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 // 하지만 사용자가 Service Role Key를 .env.local에 안 넣었을 확률이 높으니,
 // 일단 시도해보고 안 되면 Dashboard 안내를 출력하도록 합니다.
 
-const supabase = createClient(supabaseUrl, serviceRoleKey || supabaseAnonKey)
+const supabase = createClient(supabaseUrl!, serviceRoleKey || supabaseAnonKey!)
 
 const BUCKET_NAME = 'product-images'
 

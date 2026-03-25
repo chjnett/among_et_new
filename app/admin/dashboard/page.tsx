@@ -40,20 +40,33 @@ export default function AdminDashboardPage() {
 
     const fetchProducts = async () => {
         setIsLoading(true)
-        const { data, error } = await supabase
-            .from('products')
-            .select('*, sub_categories(name, categories(id, name))')
-            .order('created_at', { ascending: false })
+        const allProducts: ProductWithCategory[] = []
+        let from = 0
+        const step = 1000
 
-        if (error) {
+        try {
+            while (true) {
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*, sub_categories(name, categories(id, name))')
+                    .order('created_at', { ascending: false })
+                    .range(from, from + step - 1)
+
+                if (error) throw error
+                if (!data || data.length === 0) break
+
+                // @ts-ignore
+                allProducts.push(...data)
+                if (data.length < step) break
+                from += step
+            }
+            setProducts(allProducts)
+        } catch (error: any) {
             toast({
                 variant: "destructive",
                 title: "데이터 로딩 실패",
                 description: error.message,
             })
-        } else {
-            // @ts-ignore - Supabase type inference for nested joins can be tricky
-            setProducts(data || [])
         }
         setIsLoading(false)
     }
@@ -82,7 +95,7 @@ export default function AdminDashboardPage() {
 
     const filteredProducts = products.filter(p => {
         const matchesCategory = activeCategory === "All" || p.sub_categories?.categories?.name === activeCategory
-        
+
         const query = searchQuery.toLowerCase()
         const matchesSearch = !searchQuery ||
             (p.name?.toLowerCase() || "").includes(query) ||
