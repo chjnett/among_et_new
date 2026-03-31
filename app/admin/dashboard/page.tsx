@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 
-import { Plus, Pencil, Trash2, Loader2, LogOut, FolderOpen, Bell, LayoutTemplate } from "lucide-react"
+import { Plus, Pencil, Trash2, Loader2, LogOut, FolderOpen, Bell, LayoutTemplate, ShoppingBag } from "lucide-react"
 import { useRouter } from "next/navigation"
 
 import { Button } from "@/components/ui/button"
@@ -160,6 +160,18 @@ export default function AdminDashboardPage() {
                             <Link href="/admin/dashboard/editorial">
                                 <LayoutTemplate className="mr-2 h-4 w-4" />
                                 에디토리얼 관리
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" className="border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+                            <Link href="/admin/dashboard/reviews">
+                                <LayoutTemplate className="mr-2 h-4 w-4" />
+                                리뷰 관리
+                            </Link>
+                        </Button>
+                        <Button asChild variant="outline" className="border-border bg-transparent text-muted-foreground hover:bg-muted hover:text-foreground transition-colors">
+                            <Link href="/admin/dashboard/orders">
+                                <ShoppingBag className="mr-2 h-4 w-4" />
+                                주문 관리
                             </Link>
                         </Button>
                         <Button

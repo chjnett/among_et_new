@@ -5,6 +5,7 @@ import Image from "next/image"
 import Link from "next/link"
 import type { Product } from "@/lib/data"
 import { useScrollAnimation } from "@/hooks/use-scroll-animation"
+import { OrderDialog } from "@/components/order-dialog"
 
 const KAKAO_PAYMENT_URL = "https://open.kakao.com/o/sVOBwxli"
 const SCROLL_Y_KEY = "home-scroll-y"
@@ -71,16 +72,18 @@ function AnimatedProductCard({
 
         {/* External Link Button - Z-index higher than Link */}
         <div className="absolute top-2 right-2 z-20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <a
-            href={KAKAO_PAYMENT_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-foreground/40 backdrop-blur-sm transition-colors hover:bg-foreground hover:text-background border border-border/50"
-            title="카카오 결제 문의"
-          >
-            <ExternalLink className="h-3.5 w-3.5" />
-          </a>
+          <OrderDialog
+            productName={product.title}
+            trigger={
+              <button
+                className="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-foreground/40 backdrop-blur-sm transition-colors hover:bg-foreground hover:text-background border border-border/50"
+                title="주문하기"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+              </button>
+            }
+          />
         </div>
       </div>
 
@@ -103,15 +106,17 @@ function AnimatedProductCard({
           </p>
         )}
 
-        <a
-          href={KAKAO_PAYMENT_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={(e) => e.stopPropagation()}
-          className="relative z-20 mt-2 inline-flex items-center justify-center rounded-sm border border-black bg-black px-3 py-1.5 text-[11px] font-semibold tracking-[0.08em] text-white"
-        >
-          주문하기
-        </a>
+        <OrderDialog
+          productName={product.title}
+          trigger={
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+              className="relative z-20 mt-2 inline-flex items-center justify-center rounded-sm border border-black bg-black px-3 py-1.5 text-[11px] font-semibold tracking-[0.08em] text-white"
+            >
+              주문하기
+            </button>
+          }
+        />
       </div>
     </div>
   )

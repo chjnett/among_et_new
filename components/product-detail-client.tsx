@@ -7,6 +7,7 @@ import { Share2, Heart, ChevronLeft, ChevronRight, X } from "lucide-react"
 import type { Product } from "@/lib/data"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { OrderDialog } from "@/components/order-dialog"
 
 const KAKAO_PAYMENT_URL = "https://open.kakao.com/o/sVOBwxli"
 
@@ -163,14 +164,16 @@ export default function ProductDetailClient({ product }: { product: Product }) {
 
                     {/* Action Footer */}
                     <div className="pt-6">
-                        <a
-                            href={KAKAO_PAYMENT_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex h-12 w-full items-center justify-center rounded-md bg-black px-4 text-sm font-semibold tracking-[0.08em] text-white"
-                        >
-                            주문하기
-                        </a>
+                        <OrderDialog
+                            productName={product.title}
+                            trigger={
+                                <button
+                                    className="flex h-12 w-full items-center justify-center rounded-md bg-black px-4 text-sm font-semibold tracking-[0.08em] text-white"
+                                >
+                                    주문하기
+                                </button>
+                            }
+                        />
                     </div>
                 </div>
             </div>

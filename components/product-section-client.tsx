@@ -9,6 +9,7 @@ import { supabase } from "@/lib/supabase"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { compareLabels, normalizeLabel } from "@/lib/utils/label-utils"
+import { OrderDialog } from "@/components/order-dialog"
 
 interface ProductSectionClientProps {
   categories: Category[]
@@ -425,17 +426,19 @@ export function ProductSectionClient({
                         <p className="truncate text-[15px] font-semibold leading-5 text-foreground">
                           {product.price || "\u00A0"}
                         </p>
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.preventDefault()
-                            e.stopPropagation()
-                            window.open(KAKAO_PAYMENT_URL, "_blank", "noopener,noreferrer")
-                          }}
-                          className="mt-1 inline-flex items-center justify-center rounded-sm border border-black bg-black px-2.5 py-1 text-[11px] font-semibold tracking-[0.08em] text-white"
-                        >
-                          주문하기
-                        </button>
+                        <div onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                          <OrderDialog
+                            productName={product.title}
+                            trigger={
+                              <button
+                                type="button"
+                                className="mt-1 inline-flex items-center justify-center rounded-sm border border-black bg-black px-2.5 py-1 text-[11px] font-semibold tracking-[0.08em] text-white"
+                              >
+                                주문하기
+                              </button>
+                            }
+                          />
+                        </div>
                       </div>
                     </Link>
                   ))}

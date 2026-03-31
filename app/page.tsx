@@ -10,6 +10,8 @@ import { HeaderClient } from "@/components/header-client"
 import { HomeScrollRestore } from "@/components/home-scroll-restore"
 import { compareLabels } from "@/lib/utils/label-utils"
 
+import { ReviewSection } from "@/components/review-section"
+
 // Use ISR (Incremental Static Regeneration) - 10 minutes revalidation to balance update speed and server costs
 export const revalidate = 600
 
@@ -82,6 +84,13 @@ export default async function HomePage({
     return true
   })
 
+  // 4. Fetch Reviews
+  const { data: reviewsData } = await (supabase as any)
+    .from('reviews')
+    .select('*')
+    .eq('is_visible', true)
+    .order('created_at', { ascending: false })
+
   return (
     <main className="min-h-screen bg-background">
       <HomeScrollRestore />
@@ -101,6 +110,8 @@ export default async function HomePage({
             searchQuery={searchParam}
           />
         </section>
+
+        <ReviewSection reviews={reviewsData || []} />
       </div>
 
       <NoticePopup />
