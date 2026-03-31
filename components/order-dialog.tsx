@@ -79,9 +79,12 @@ export function OrderDialog({ productName = "", trigger }: OrderDialogProps) {
 
             if (error) throw error
 
+            // Redirect directly to KakaoTalk
+            window.location.href = "https://open.kakao.com/o/sVOBwxli"
+
             toast({
                 title: "주문 접수 완료",
-                description: "주문이 성공적으로 접수되었습니다. 곧 연락드리겠습니다.",
+                description: "주문이 성공적으로 접수되었습니다. 카카오톡 상담실로 연결합니다.",
             })
             setIsOpen(false)
             form.reset({
@@ -111,10 +114,14 @@ export function OrderDialog({ productName = "", trigger }: OrderDialogProps) {
                 )}
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px] bg-white border-none shadow-2xl">
-                <DialogHeader>
-                    <DialogTitle className="text-xl font-bold tracking-tight text-foreground text-center pt-4">
-                        주문서 작성
+                <DialogHeader className="space-y-4 pt-6">
+                    <DialogTitle className="text-2xl font-bold tracking-tight text-foreground text-center">
+                        주문하기
                     </DialogTitle>
+                    <p className="text-center text-[13px] leading-relaxed text-muted-foreground px-4">
+                        주문 정보를 입력해 주세요. 결제는 주문 접수 후<br />
+                        카카오톡 상담을 통해 진행됩니다.
+                    </p>
                 </DialogHeader>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 py-4">
@@ -179,7 +186,7 @@ export function OrderDialog({ productName = "", trigger }: OrderDialogProps) {
                                 {isSubmitting ? (
                                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                                 ) : null}
-                                주문 완료하기
+                                주문 완료
                             </Button>
                         </div>
                     </form>

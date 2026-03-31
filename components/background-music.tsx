@@ -13,14 +13,16 @@ const SONGS = [
 
 export function BackgroundMusic() {
     const [isPlaying, setIsPlaying] = useState(false)
-    const [currentTrackIndex, setCurrentTrackIndex] = useState(Math.floor(Math.random() * SONGS.length))
+    const [currentTrackIndex, setCurrentTrackIndex] = useState(0)
     const [isMuted, setIsMuted] = useState(false)
     const [isExpanded, setIsExpanded] = useState(true)
     const [hasInteracted, setHasInteracted] = useState(false)
+    const [mounted, setMounted] = useState(false)
     const audioRef = useRef<HTMLAudioElement | null>(null)
     const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
     useEffect(() => {
+        setMounted(true)
         // Shuffle playlist indices initially
         setCurrentTrackIndex(Math.floor(Math.random() * SONGS.length))
 
