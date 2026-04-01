@@ -61,10 +61,18 @@ export default async function ProductPage({
         description: pd.description || ""
     }
 
+    // 2. Fetch Reviews for this product
+    const { data: reviewsData } = await supabase
+        .from('reviews')
+        .select('*')
+        .eq('is_visible', true)
+        .eq('product_id', id)
+        .order('created_at', { ascending: false })
+
     return (
         <main className="min-h-screen bg-background">
             <Suspense fallback={<div>Loading...</div>}>
-                <ProductDetailClient product={product} />
+                <ProductDetailClient product={product} reviews={(reviewsData as any) || []} />
             </Suspense>
         </main>
     )

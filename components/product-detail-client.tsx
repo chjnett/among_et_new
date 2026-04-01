@@ -6,8 +6,15 @@ import { Share2, Heart, X, Minus, Info } from "lucide-react"
 import type { Product } from "@/lib/data"
 import { OrderDialog } from "@/components/order-dialog"
 import { cn } from "@/lib/utils"
+import { ReviewSection } from "@/components/review-section"
 
-export default function ProductDetailClient({ product }: { product: Product }) {
+export default function ProductDetailClient({
+    product,
+    reviews = []
+}: {
+    product: Product;
+    reviews?: any[]
+}) {
     const router = useRouter()
     const [isWishlisted, setIsWishlisted] = useState(false)
 
@@ -169,6 +176,19 @@ export default function ProductDetailClient({ product }: { product: Product }) {
                     ))}
                 </div>
             </div>
+
+            {/* 3. Review Section (Only if reviews exist) */}
+            {reviews && reviews.length > 0 && (
+                <div className="w-full bg-white border-t border-border/20 py-12 md:py-24">
+                    <div className="mx-auto max-w-4xl px-6 md:px-12">
+                        <div className="flex flex-col items-center text-center space-y-4 mb-10">
+                            <span className="text-[10px] font-black uppercase tracking-[0.4em] text-zinc-400">Feedback</span>
+                            <h2 className="text-3xl font-bold tracking-tight text-black">Product Reviews</h2>
+                        </div>
+                        <ReviewSection reviews={reviews} />
+                    </div>
+                </div>
+            )}
 
             {/* Enhanced Sticky Bottom Bar for All Viewports (for quick access) */}
             <div className="fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-xl border-t border-border/20 p-3 lg:px-12 lg:py-4">

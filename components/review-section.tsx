@@ -1,7 +1,13 @@
 "use client"
 
-import { useEffect, useState, useRef } from "react"
+import { useEffect, useState } from "react"
 import { Star } from "lucide-react"
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog"
 
 interface Review {
     id: string
@@ -14,7 +20,7 @@ interface Review {
 
 export function ReviewSection({ reviews }: { reviews: Review[] }) {
     const [isMounted, setIsMounted] = useState(false)
-    const containerRef = useRef<HTMLDivElement>(null)
+    const [selectedReview, setSelectedReview] = useState<Review | null>(null)
 
     useEffect(() => {
         setIsMounted(true)
@@ -27,15 +33,6 @@ export function ReviewSection({ reviews }: { reviews: Review[] }) {
         const month = String(d.getMonth() + 1).padStart(2, '0')
         const day = String(d.getDate()).padStart(2, '0')
         return `${year}. ${month}. ${day}.`
-    }
-
-    const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
-
-    const toggleExpand = (id: string) => {
-        setExpandedIds(prev => ({
-            ...prev,
-            [id]: !prev[id]
-        }))
     }
 
     if (!reviews || reviews.length === 0) return null
@@ -57,7 +54,8 @@ export function ReviewSection({ reviews }: { reviews: Review[] }) {
                 {reviews.map((review) => (
                     <div
                         key={review.id}
-                        className="group min-w-[284px] max-w-[284px] snap-start overflow-hidden rounded-md border border-border/60 bg-white shadow-sm transition-all hover:shadow-md h-fit"
+                        className="group min-w-[284px] max-w-[284px] snap-start overflow-hidden rounded-md border border-border/60 bg-white shadow-sm transition-all hover:shadow-md h-auto cursor-pointer"
+                        onClick={() => setSelectedReview(review)}
                     >
                         {/* Image Block - Editorial Style */}
                         <div className="relative h-[152px] overflow-hidden bg-muted/20">
@@ -104,21 +102,78 @@ export function ReviewSection({ reviews }: { reviews: Review[] }) {
                                     {isMounted ? formatDate(review.created_at) : ""}
                                 </p>
                             </div>
-                            <h3 className={`text-[15px] font-semibold leading-tight tracking-tight text-foreground min-h-[40px] whitespace-pre-wrap ${!expandedIds[review.id] ? "line-clamp-2" : ""}`}>
+                            <p className="text-[14px] font-medium leading-relaxed tracking-tight text-foreground line-clamp-2 min-h-[40px] whitespace-pre-wrap">
                                 {review.content}
-                            </h3>
+                            </p>
                             <div className="pt-2">
                                 <span
-                                    onClick={() => toggleExpand(review.id)}
-                                    className="inline-block text-[10px] font-bold text-black border-b border-black uppercase tracking-widest pb-0.5 cursor-pointer hover:opacity-70"
+                                    className="inline-block text-[10px] font-bold text-black border-b border-black uppercase tracking-widest pb-0.5"
                                 >
-                                    {expandedIds[review.id] ? "Close" : "Read more"}
+                                    Read more
                                 </span>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
+
+            {/* Review Detail Modal */}
+            <Dialog open={!!selectedReview} onOpenChange={(open) => !open && setSelectedReview(null)}>
+                <DialogContent className="max-w-[90vw] sm:max-w-md rounded-lg p-0 overflow-hidden border-none bg-white">
+                    <DialogHeader className="p-0">
+                        <DialogTitle className="sr-only">Review Detail</DialogTitle>
+                    </DialogHeader>
+                    {selectedReview && (
+                        <div className="flex flex-col">
+                            {selectedReview.image_url && (
+                                <div className="relative aspect-square w-full bg-muted">
+                                    <img
+                                        src={selectedReview.image_url}
+                                        alt="Full review photo"
+                                        className="h-full w-full object-cover"
+                                    />
+                                </div>
+                            )}
+                            <div className="p-6 space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <div className="space-y-0.5">
+                                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400">Customer</p>
+                                        <p className="text-[15px] font-bold text-black">{selectedReview.author_name}</p>
+                                    </div>
+                                    <div className="text-right space-y-0.5">
+                                        <div className="flex gap-0.5">
+                                            {[...Array(5)].map((_, i) => (
+                                                <Star
+                                                    key={i}
+                                                    className={`h-3 w-3 ${i < selectedReview.rating ? "fill-yellow-500 text-yellow-500" : "text-zinc-200"}`}
+                                                />
+                                            ))}
+                                        </div>
+                                        <p className="text-[10px] text-zinc-400 font-medium">{formatDate(selectedReview.created_at)}</p>
+                                    </div>
+                                </div>
+
+                                <div className="h-[1px] w-full bg-zinc-100"></div>
+
+                                <div className="pt-2">
+                                    <p className="text-[15px] leading-[1.7] text-zinc-600 whitespace-pre-wrap font-medium">
+                                        {selectedReview.content}
+                                    </p>
+                                </div>
+
+                                <div className="pt-6">
+                                    <button
+                                        onClick={() => setSelectedReview(null)}
+                                        className="w-full h-12 bg-black text-white text-[11px] font-bold uppercase tracking-[0.3em] transition-all hover:bg-zinc-800"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
         </section>
     )
 }
