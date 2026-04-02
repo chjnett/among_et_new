@@ -5,9 +5,15 @@ import { Music, Music2, Volume2, VolumeX, SkipForward } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const SONGS = [
+    "Blooming - bgm.mp3 (128k).mp3",
+    "Caramel lights - bgm.mp3 (128k).mp3",
     "Forbidden Love - K'Cherie - Topic (128k).mp3",
+    "Forever starts with you - bgm.mp3 (128k).mp3",
     "Jenevieve - Love Quotes [Official Audio] - Jenevieve (128k).mp3",
+    "Left the light on - bgm.mp3 (128k).mp3",
     "Like i do - J.Tajor.mp3",
+    "Love Looks Like You - bgm.mp3 (128k).mp3",
+    "Some summers stay - bgm.mp3 (128k).mp3",
     "THEY. - Play Fight with Tinashe (Official Lyric Video) - THEY. (128k).mp3"
 ]
 
