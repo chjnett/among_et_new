@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { supabase } from "@/lib/supabase"
 
+import imageCompression from 'browser-image-compression'
+
 interface ImageUploaderProps {
     images: string[]
     onChange: (images: string[]) => void
@@ -25,21 +27,33 @@ export function ImageUploader({ images, onChange, maxImages = Infinity }: ImageU
         setIsUploading(true)
         const newImages = [...images]
 
-
-
-
         try {
             for (let i = 0; i < files.length; i++) {
                 if (newImages.length >= maxImages) break
 
                 const file = files[i]
-                const fileExt = file.name.split('.').pop()
+
+                // 브라우저 딴에서 이미지 압축 진행
+                const options = {
+                    maxSizeMB: 0.3, // 최대 300KB로 제한
+                    maxWidthOrHeight: 1200, // 최대 해상도 1200px
+                    useWebWorker: true // 업로드 중 화면 멈춤 방지
+                }
+
+                let compressedFile = file;
+                try {
+                    compressedFile = await imageCompression(file, options);
+                } catch (error) {
+                    console.error('이미지 압축 실패, 원본으로 대체합니다:', error);
+                }
+
+                const fileExt = file.name.split('.').pop() || 'jpeg'
                 const fileName = `${Math.random().toString(36).substring(2, 15)}_${Date.now()}.${fileExt}`
                 const filePath = `${fileName}`
 
                 const { error: uploadError } = await supabase.storage
                     .from('product-images')
-                    .upload(filePath, file)
+                    .upload(filePath, compressedFile)
 
                 if (uploadError) {
                     console.error('Error uploading file:', uploadError)
