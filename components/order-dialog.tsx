@@ -25,6 +25,8 @@ import { supabase } from "@/lib/supabase"
 import { useToast } from "@/components/ui/use-toast"
 import { Loader2 } from "lucide-react"
 
+const KAKAO_OPENCHAT_URL = "https://open.kakao.com/o/sVOBwxli"
+
 const formSchema = z.object({
     customerName: z.string().min(2, {
         message: "성함을 2자 이상 입력해주세요.",
@@ -79,9 +81,6 @@ export function OrderDialog({ productName = "", trigger }: OrderDialogProps) {
 
             if (error) throw error
 
-            // Redirect directly to KakaoTalk
-            window.location.href = "https://open.kakao.com/o/sVOBwxli"
-
             toast({
                 title: "주문 접수 완료",
                 description: "주문이 성공적으로 접수되었습니다. 카카오톡 상담실로 연결합니다.",
@@ -93,6 +92,11 @@ export function OrderDialog({ productName = "", trigger }: OrderDialogProps) {
                 contact: "",
                 address: "",
             })
+
+            const popup = window.open(KAKAO_OPENCHAT_URL, "_blank", "noopener,noreferrer")
+            if (!popup) {
+                window.location.href = KAKAO_OPENCHAT_URL
+            }
         } catch (error: any) {
             toast({
                 variant: "destructive",
